@@ -5,7 +5,7 @@ import { db } from "../../db/connection";
 export const getProfile = new Elysia()
   .use(auth)
   .get('/me', async ({ getCurrentUser }) => {
-    const { userId, restaurantId } = await getCurrentUser()
+    const { userId } = await getCurrentUser()
 
     const user = await db.query.users.findFirst({
       where(fields, { eq }) {
