@@ -1,5 +1,4 @@
 import Elysia, { t } from "elysia";
-import nodemailer from 'nodemailer'
 import { db } from "../../db/connection";
 import { createId } from "@paralleldrive/cuid2";
 import { authLinks } from "../../db/schema";

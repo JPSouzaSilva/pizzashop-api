@@ -24,13 +24,6 @@ export const emailTemplateHtml = ({ name, link }: emailProps) => {
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .header {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .header img {
-            max-width: 100px;
-        }
         .content {
             padding: 20px;
             text-align: left;
