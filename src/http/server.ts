@@ -5,6 +5,7 @@ import { authenticateFromLink } from './routes/authenticate-from-link';
 import { signOut } from './routes/sign-out';
 import { getProfile } from './routes/get-profile';
 import { getManagedRestaurant } from './routes/get-managed-restaurant';
+import { env } from '../env';
 
 const app = new Elysia()
   .use(registerRestaurant)
@@ -22,11 +23,11 @@ const app = new Elysia()
       default: {
         console.error(error)
 
-        return new Response(null, { status: 500 })
+        return new Response(null, { status: 500 })  
       }
     }
   })
 
-app.listen(8080, () => {
-  console.log('Server running on port 8080');
+app.listen(env.HTTP_PORT, () => {
+  console.log(`Server running on port ${env.HTTP_PORT}`);
 })

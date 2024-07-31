@@ -4,8 +4,8 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url().min(1),
   API_BASE_URL: z.string().url().min(1),
   AUTH_REDIRECT_URL: z.string().url().min(1),
-  JWT_SECRET_KEY: z.string().min(1)
-
+  JWT_SECRET_KEY: z.string().min(1),
+  HTTP_PORT: z.coerce.number().int().default(8080)
 })
 
 export const env = envSchema.parse(process.env)
