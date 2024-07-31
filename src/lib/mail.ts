@@ -1,14 +1,11 @@
 import nodemailer from 'nodemailer'
-
-const account = await nodemailer.createTestAccount()
+import { env } from '../env'
 
 export const mail = nodemailer.createTransport({
-  host: account.smtp.host,
-  port: account.smtp.port,
-  secure: account.smtp.secure,
-  debug: true,
+  host: env.MAIL_HOST,
+  port: env.MAIL_PORT,
   auth: {
-    user: account.user,
-    pass: account.pass
+    user: env.MAIL_USERNAME,
+    pass: env.MAIL_PASSWORD
   }
 })
