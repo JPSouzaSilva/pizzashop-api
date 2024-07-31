@@ -4,8 +4,27 @@ import dayjs from "dayjs";
 import { auth } from "../auth";
 import { authLinks } from "../../db/schema";
 import { eq } from "drizzle-orm";
+import { AuthLinkNotFoundError } from "../errors/auth-link-not-found";
+import { AuthLinkExpiredError } from "../errors/auth-link-expired-error";
 
 export const authenticateFromLink = new Elysia()
+  .error({
+    AUTH_LINK_NOT_FOUND: AuthLinkNotFoundError,
+    AUTH_LINK_EXPIRED: AuthLinkExpiredError
+  })
+  .onError(({ error, code, set }) => {
+    switch (code) {
+      case 'AUTH_LINK_NOT_FOUND': {
+        set.status = 400
+        return { code, message: error.message }
+      }
+      case 'AUTH_LINK_EXPIRED': {
+        set.status = 400
+        return { code, message: error.message }
+      }
+
+    }
+  })
   .use(auth)
   .get('/auth-links/authenticate', async ({ query, signUser, redirect }) => {
     const { code, redirectUrl } = query
@@ -17,13 +36,13 @@ export const authenticateFromLink = new Elysia()
     })
 
     if (!authLinksFromCode) {
-      throw new Error('Auth link not found!')
+      throw new AuthLinkNotFoundError()
     }
 
     const daysSinceAuthLinkWasCreated = dayjs().diff(authLinksFromCode.createdAt, 'days')
 
     if (daysSinceAuthLinkWasCreated > 7) {
-      throw new Error('Auth link expired, please generate a new one.')
+      throw new AuthLinkExpiredError()
     }
 
     const managedRestaurant = await db.query.restaurants.findFirst({

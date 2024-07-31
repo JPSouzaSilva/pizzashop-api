@@ -3,8 +3,20 @@ import { db } from "../../db/connection";
 import { createId } from "@paralleldrive/cuid2";
 import { authLinks } from "../../db/schema";
 import { env } from "../../env";
+import { UserNotFoundError } from "../errors/user-not-found-error";
 
 export const sendAuthLink = new Elysia()
+  .error({
+    USER_NOT_FOUND: UserNotFoundError
+  })
+  .onError(({ error, code, set }) => {
+    switch (code) {
+      case "USER_NOT_FOUND": {
+        set.status = 404
+        return { code, message: error.message }
+      }
+    }
+  })
   .post('/authenticate', async ({ body, set }) => {
     const { email } = body
 
@@ -15,7 +27,7 @@ export const sendAuthLink = new Elysia()
     })
 
     if (!userFromEmail) {
-      throw new Error('User not found')
+      throw new UserNotFoundError()
     }
 
     const authLinkCode = createId()
