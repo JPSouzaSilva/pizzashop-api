@@ -6,6 +6,12 @@ import { signOut } from './routes/sign-out';
 import { getProfile } from './routes/get-profile';
 import { getManagedRestaurant } from './routes/get-managed-restaurant';
 import { env } from '../env';
+import { getOrderDetails } from './routes/get-order-details';
+import { approveOrder } from './routes/approve-order';
+import { dispatchOrder } from './routes/dispatch-order';
+import { deliveredOrder } from './routes/delivered-order';
+import { cancelOrder } from './routes/cancel-order';
+import { getOrders } from './routes/get-orders';
 
 const app = new Elysia()
   .use(registerRestaurant)
@@ -14,6 +20,12 @@ const app = new Elysia()
   .use(signOut)
   .use(getProfile)
   .use(getManagedRestaurant)
+  .use(getOrderDetails)
+  .use(approveOrder)
+  .use(dispatchOrder)
+  .use(deliveredOrder)
+  .use(cancelOrder)
+  .use(getOrders)
   .onError(({ code, error, set }) => {
     switch (code) {
       case 'VALIDATION': {
@@ -29,5 +41,5 @@ const app = new Elysia()
   })
 
 app.listen(env.HTTP_PORT, () => {
-  console.log(`Server running on port ${env.HTTP_PORT}`);
+  console.log(`🚀 Server running on port ${env.HTTP_PORT}`);
 })
